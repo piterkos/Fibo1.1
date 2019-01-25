@@ -1,9 +1,11 @@
 ﻿
 using System;
+using System.Linq;
 using cAlgo.API;
 using cAlgo.API.Internals;
 using cAlgo.API.Indicators;
 using cAlgo.Indicators;
+using System.Collections.Generic;
 
 namespace cAlgo
 {
@@ -32,12 +34,13 @@ namespace cAlgo
         private double zasieg;
         private string rodzjaTrejdu;
         private double poziomBreakEven = 0.236;
-
+        private List<string> listaObjektow;
 
         protected override void Initialize()
         {
             Chart.MouseUp += OnChartMouseUp;
             Chart.MouseDown += OnChartMouseDown;
+            listaObjektow = new List<string>();
         }
 
         void OnChartMouseDown(ChartMouseEventArgs obj)
@@ -197,28 +200,28 @@ namespace cAlgo
                     //double cenaSL = cena1 - (cena2 - cena1) * 0.05;
                     double cenaSL2 = ((cena2 - cena1) * (1 - 0.9)) + cena1;
                     cenaBE = cenaSL2;
-                    Chart.DrawHorizontalLine("0.0", cena0_0, Color.White);
-                    Chart.DrawHorizontalLine("100", cena100, Color.White);
-                    Chart.DrawHorizontalLine("61.8", cena61_8, Color.Green);
-                    Chart.DrawHorizontalLine("38.2", cena38_2, Color.Green, 1, LineStyle.DotsRare);
-                    Chart.DrawHorizontalLine("161.8", cena161_8, Color.Blue);
-                    Chart.DrawHorizontalLine("161.8FI", cena161_8FI, Color.Blue);
-                    Chart.DrawHorizontalLine("261.8", cena261_8, Color.BurlyWood, 1, LineStyle.DotsRare);
-                    Chart.DrawHorizontalLine("261.8FI", cena261_8FI, Color.BurlyWood, 1, LineStyle.DotsRare);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("_0.0", cena0_0, Color.White).Name);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("100", cena100, Color.White).Name);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("61.8", cena61_8, Color.Green).Name);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("38.2", cena38_2, Color.Green, 1, LineStyle.DotsRare).Name);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("161.8", cena161_8, Color.Blue).Name);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("161.8FI", cena161_8FI, Color.Blue).Name);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("261.8", cena261_8, Color.BurlyWood, 1, LineStyle.DotsRare).Name);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("261.8FI", cena261_8FI, Color.BurlyWood, 1, LineStyle.DotsRare).Name);
                     //Chart.DrawHorizontalLine("CenaSL", cenaSL, Color.Red);
-                    Chart.DrawHorizontalLine("CenaSL2", cenaSL2, Color.Red);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("CenaSL2", cenaSL2, Color.Red).Name);
                     //Chart.DrawText("Opis61.8", "61.8 %", Chart.LastVisibleBarIndex, cena61_8, Color.Aqua); // pokazuje na bieżąco
-                    Chart.DrawText("Opis61.8", "61.8 %", czas2, cena61_8, Color.Aqua);
-                    Chart.DrawText("Opis38.2", "38.2 % - BreakEven", czas2, cena38_2, Color.White);
-                    Chart.DrawText("Opis0.0", "0 %", czas2, cena0_0, Color.Aqua);
-                    Chart.DrawText("Opis100", "100 %", czas2, cena100, Color.Aqua);
-                    Chart.DrawText("Opis161", "161.8 %", czas2, cena161_8, Color.Aqua);
-                    Chart.DrawText("Opis161FI", "161.8 %", czas2, cena161_8FI, Color.Aqua);
-                    Chart.DrawText("Opis261FI", "261.8 %", czas2, cena261_8FI, Color.Aqua);
-                    Chart.DrawText("Opis261", "261.8 %", czas2, cena261_8, Color.Aqua);
-                    Chart.DrawText("Opis261FI", "261.8 %", czas2, cena261_8FI, Color.Aqua);
+                    listaObjektow.Add(Chart.DrawText("Opis61.8", "61.8 %", czas2, cena61_8, Color.Aqua).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis38.2", "38.2 % - BreakEven", czas2, cena38_2, Color.White).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis0.0", "0 %", czas2, cena0_0, Color.Aqua).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis100", "100 %", czas2, cena100, Color.Aqua).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis161", "161.8 %", czas2, cena161_8, Color.Aqua).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis161FI", "161.8 %", czas2, cena161_8FI, Color.Aqua).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis261FI", "261.8 %", czas2, cena261_8FI, Color.Aqua).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis261", "261.8 %", czas2, cena261_8, Color.Aqua).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis261FI", "261.8 %", czas2, cena261_8FI, Color.Aqua).Name);
                     //Chart.DrawText("OpisCenaSL", "Stop Loss", czas2, cenaSL, Color.Aqua);
-                    Chart.DrawText("OpisCenaSL2", "Stop Loss", czas2, cenaSL2, Color.Aqua);
+                    listaObjektow.Add(Chart.DrawText("OpisCenaSL2", "Stop Loss", czas2, cenaSL2, Color.Aqua).Name);
                 }
                 else
                 {
@@ -237,27 +240,28 @@ namespace cAlgo
                     //double cenaSL = cena1 + (cena1 - cena2) * 0.1;
                     double cenaSL2 = ((cena1 - cena2) * (0.9)) + cena2;
                     cenaBE = cenaSL2;
-                    Chart.DrawHorizontalLine("0.0", cena0_0, Color.White);
-                    Chart.DrawHorizontalLine("100", cena100, Color.White);
-                    Chart.DrawHorizontalLine("61.8", cena61_8, Color.Green);
-                    Chart.DrawHorizontalLine("38.2", cena38_2, Color.Green, 1, LineStyle.DotsRare);
-                    Chart.DrawHorizontalLine("161.8", cena161_8, Color.Blue);
-                    Chart.DrawHorizontalLine("161.8FI", cena161_8FI, Color.Blue);
-                    Chart.DrawHorizontalLine("261.8", cena261_8, Color.BurlyWood, 1, LineStyle.DotsRare);
-                    Chart.DrawHorizontalLine("261.8FI", cena261_8FI, Color.BurlyWood, 1, LineStyle.DotsRare);
+                    
+                    listaObjektow.Add(Chart.DrawHorizontalLine("0.0", cena0_0, Color.White).Name);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("100", cena100, Color.White).Name);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("61.8", cena61_8, Color.Green).Name);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("38.2", cena38_2, Color.Green, 1, LineStyle.DotsRare).Name);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("161.8", cena161_8, Color.Blue).Name);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("161.8FI", cena161_8FI, Color.Blue).Name);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("261.8", cena261_8, Color.BurlyWood, 1, LineStyle.DotsRare).Name);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("261.8FI", cena261_8FI, Color.BurlyWood, 1, LineStyle.DotsRare).Name);
                     // Chart.DrawHorizontalLine("CenaSL", cenaSL, Color.Red);
-                    Chart.DrawHorizontalLine("CenaSL", cenaSL2, Color.Red);
+                    listaObjektow.Add(Chart.DrawHorizontalLine("CenaSL", cenaSL2, Color.Red).Name);
                     //Chart.DrawText("Opis61.8", "61.8 %", Chart.LastVisibleBarIndex, cena61_8, Color.Aqua); // pokazuje na bieżąco
-                    Chart.DrawText("Opis61.8", "61.8 %", czas2, cena61_8, Color.Aqua);
-                    Chart.DrawText("Opis38.2", "38.2 % - BreakEven", czas2, cena38_2, Color.White);
-                    Chart.DrawText("Opis0.0", "0 %", czas2, cena0_0, Color.Aqua);
-                    Chart.DrawText("Opis100", "100 %", czas2, cena100, Color.Aqua);
-                    Chart.DrawText("Opis161", "161.8 %", czas2, cena161_8, Color.Aqua);
-                    Chart.DrawText("Opis161FI", "161.8 %", czas2, cena161_8FI, Color.Aqua);
-                    Chart.DrawText("Opis261", "261.8 %", czas2, cena261_8, Color.Aqua);
-                    Chart.DrawText("Opis261FI", "261.8 %", czas2, cena261_8FI, Color.Aqua);
+                    listaObjektow.Add(Chart.DrawText("Opis61.8", "61.8 %", czas2, cena61_8, Color.Aqua).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis38.2", "38.2 % - BreakEven", czas2, cena38_2, Color.White).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis0.0", "0 %", czas2, cena0_0, Color.Aqua).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis100", "100 %", czas2, cena100, Color.Aqua).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis161", "161.8 %", czas2, cena161_8, Color.Aqua).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis161FI", "161.8 %", czas2, cena161_8FI, Color.Aqua).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis261", "261.8 %", czas2, cena261_8, Color.Aqua).Name);
+                    listaObjektow.Add(Chart.DrawText("Opis261FI", "261.8 %", czas2, cena261_8FI, Color.Aqua).Name);
                     //Chart.DrawText("OpisCenaSL", "Stop Loss", czas2, cenaSL, Color.Aqua);
-                    Chart.DrawText("OpisCenaSL2", "Stop Loss", czas2, cenaSL2, Color.Aqua);
+                    listaObjektow.Add(Chart.DrawText("OpisCenaSL2", "Stop Loss", czas2, cenaSL2, Color.Aqua).Name);
                 }
             }
         }
@@ -266,7 +270,13 @@ namespace cAlgo
             if (LiczbaKlikniec == 0)
             {
                 Chart.DrawStaticText("Opis", "Trzymając CTRL, kliknij na wykresie, aby określić cenę początkową", VerticalAlignment.Center, HorizontalAlignment.Left, Color.AliceBlue);
-                Chart.RemoveAllObjects();
+                // Chart.RemoveAllObjects();
+                foreach (var okjekt in listaObjektow)
+                {
+                    UsunObiekt(okjekt);
+                }
+               
+              
             }
             if (LiczbaKlikniec == 1)
             {
